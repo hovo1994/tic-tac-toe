@@ -5,6 +5,49 @@ board = [ '1', '2', '3', '4', '5', '6', '7', '8', '9' ]
 wins = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1,
 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ]
 
+def play():
+	printBoard()
+	print 'Tc Tac Toe'
+	print 'two players'
+	while True :
+		wipeBoard()
+		player_turn = 'X'
+		while checkWin(swapPlayer(player_turn)) == False and canMove() == True:
+			getMove(player_turn)
+			printBoard()
+			player_turn = swapPlayer(player_turn)
+		if checkWin(swapPlayer(player_turn)):
+			print 'Player', swapPlayer(player_turn), 'wins New Game'
+		else:
+			print 'A draw.  New Game'
+
+def swapPlayer(player):
+	if player == 'X':
+		player = 'O'
+	else:
+		player = 'X'
+	return player
+
+def getMove(player):
+	global board
+	correct_number = False
+	while correct_number == False:
+		square = raw_input('Square to place the ' + player + ' ')
+		try:
+			square = int(square)
+		except:
+			square = -2
+		square -= 1
+		if square >= 0 and square < 10:
+			if board[square] == ' ':
+				board[square] = player
+				correct_number = True
+			else:
+				print 'Square already occupied'
+		else:
+			print 'incorrect square try again'
+
+
 def printBoard():
 	print
 	print '|',
@@ -21,7 +64,6 @@ def printBoard():
 def checkWin(player):
 	win = False
 	for test in wins :
-		print test
 		count = 0
 		for squares in test :
 			if board[squares] == player :
@@ -43,10 +85,4 @@ def canMove():
 	return move
 
 if __name__ == '__main__':
-	printBoard()
-	print 'Checkign board for X'
-	if checkWin('X') :
-		print 'Game Over X wins'
-	print 'Checkign board for O'
-	if checkWin('O') :
-		print 'Game Over O wins'
+	play()
